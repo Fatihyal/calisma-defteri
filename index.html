@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Çalışma Defterim</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#2f6f6a">
+<meta name="mobile-web-app-capable" content="yes">
 <style>
   :root { --bg:#f3f6f4; --card:#fff; --ink:#26303b; --soft:#657282; --main:#2f6f6a; --main-d:#245a56; --main-l:#e6f0ee; --warn:#c2502f; --ok:#2e7d4f; --line:#dfe6e3; --mark:#ffe08a; --shadow:0 2px 10px rgba(38,48,59,.07); }
   * { box-sizing:border-box; }
@@ -61,6 +66,14 @@
   .stat { flex:1; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:12px 16px; box-shadow:var(--shadow); }
   .stat b { display:block; font-size:30px; color:var(--main-d); line-height:1.1; }
   .stat span { font-size:16px; color:var(--soft); }
+  .week { display:flex; gap:8px; margin:0 0 6px; }
+  .day { flex:1; text-align:center; background:var(--card); border:2px solid var(--line); border-radius:14px; padding:8px 2px; }
+  .day small { display:block; font-size:14px; color:var(--soft); text-transform:capitalize; }
+  .day b { font-size:26px; color:var(--soft); line-height:1.2; }
+  .day.has { border-color:var(--main); background:var(--main-l); }
+  .day.has b, .day.has small { color:var(--main-d); }
+  .day.today { box-shadow:0 0 0 3px #3f8d8544; }
+  button.start { width:100%; font-size:26px; padding:20px; border-radius:18px; background:linear-gradient(135deg,#2a7d5c,#2f6f6a); }
   ol.how { padding-left:0; list-style:none; counter-reset:s; margin:8px 0; }
   ol.how li { counter-increment:s; position:relative; padding:6px 0 6px 52px; min-height:44px; }
   ol.how li::before { content:counter(s); position:absolute; left:0; top:6px; width:38px; height:38px; line-height:38px; border-radius:50%; background:var(--main); color:#fff; text-align:center; font-weight:700; }
@@ -112,7 +125,7 @@ function h(tag, attrs = {}, ...kids) {
     else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
     else if (v !== false && v != null) e.setAttribute(k, v);
   }
-  for (const kid of kids.flat()) e.append(kid instanceof Node ? kid : document.createTextNode(kid));
+  for (const kid of kids.flat().filter(k => k != null && k !== false)) e.append(kid instanceof Node ? kid : document.createTextNode(kid));
   return e;
 }
 const app = document.getElementById('app');
@@ -186,6 +199,8 @@ function help() {
     h('p', {}, 'İlk tekrar ertesi gün, sonra 3 gün, 1 hafta, 2 hafta sonra gelir. İyi hatırlarsan aralık uzar, zorlanırsan kısalır. Sınav günü girersen tekrarlar sınava göre ayarlanır.'),
     h('h3', {}, 'Konuşarak yazma'),
     h('p', {}, 'Kırmızı "Konuşarak yaz" düğmesi sesini yazıya çevirir. İnternet ister ve ilk seferde mikrofon izni sorar, "İzin ver" demelisin.'),
+    h('h3', {}, 'Uygulama gibi kullanmak'),
+    h('p', {}, 'Chrome\'un sağ üstündeki üç noktaya dokun, "Ana ekrana ekle" ya da "Uygulamayı yükle" de. Ana ekranda Defterim simgesi çıkar, tam ekran açılır ve internet olmasa da açılır (konuşarak yazma hariç).'),
     h('h3', {}, 'Notlarım nerede duruyor?'),
     h('p', {}, 'Notların sadece bu cihazın tarayıcısında saklanır, başka yere gönderilmez. Tarayıcı verisi silinirse ya da cihaz değişirse notlar kaybolur. Bunun için ana sayfanın altındaki "Yedekleme" bölümü var: "Yedek al" notlarını bir dosya olarak kaydeder, "Yedek yükle" o dosyayı geri getirir. Ayda bir yedek almak iyi olur.'),
     h('div', {class:'row'}, h('button', {onclick: home}, 'Anladım'))));
@@ -202,11 +217,23 @@ function home() {
     parts.push(h('div', {class:'card'}, h('h2', {}, 'Hoş geldin'), howSteps(),
       h('p', {class:'hint'}, 'Daha fazla bilgi için üstteki "Nasıl çalışır?" düğmesine dokun.')));
   } else {
-    parts.push(h('div', {class:'stats'},
-      h('div', {class:'stat'}, h('b', {}, String(due.length)), h('span', {}, 'bugün tekrar')),
-      h('div', {class:'stat'}, h('b', {}, String(notes.length)), h('span', {}, 'toplam not'))));
+    if (due.length) {
+      parts.push(h('div', {style:'margin-bottom:18px'},
+        h('button', {class:'start', onclick: () => review(due[0].id)}, `Bugünkü tekrarı başlat (${due.length})`),
+        h('p', {class:'hint', style:'text-align:center'}, 'Sırayla notlarını tekrar edersin. Bitince sıradaki otomatik gelir.')));
+    } else {
+      parts.push(h('div', {class:'card', style:'text-align:center'}, h('h2', {style:'margin:0'}, 'Bugünlük tekrar yok'),
+        h('p', {class:'hint', style:'margin:4px 0 0'}, 'İstersen yeni bir konu ekleyebilirsin.')));
+    }
+    const week = h('div', {class:'week'}, [0,1,2,3,4,5,6].map(i => {
+      const d = t + i;
+      const c = notes.filter(n => i === 0 ? n.due <= t : n.due === d).length;
+      const label = i === 0 ? 'Bugün' : i === 1 ? 'Yarın' : dayToDate(d).toLocaleDateString('tr-TR', {weekday:'short'});
+      return h('div', {class:'day' + (c ? ' has' : '') + (i === 0 ? ' today' : '')}, h('small', {}, label), h('b', {}, String(c)));
+    }));
+    parts.push(week, h('p', {class:'hint', style:'margin:0 0 18px'}, 'Önümüzdeki 7 gün: her kutu o gün kaç tekrarın olduğunu gösterir.'));
   }
-  parts.push(h('div', {class:'row', style:'margin:0 0 18px'}, h('button', {class:'big', onclick: () => addNote()}, '+ Yeni not ekle')));
+  parts.push(h('div', {class:'row', style:'margin:0 0 18px'}, h('button', {class: notes.length && due.length ? 'alt big' : 'big', onclick: () => addNote()}, '+ Yeni not ekle')));
 
   if (notes.length) {
     const dueCard = h('div', {class:'card'}, h('h2', {}, 'Bugün tekrar'),
@@ -424,6 +451,8 @@ function result(n, toks, keys, slots) {
   const ratio = right / slots.length;
   const res = ratio >= 0.8 ? 'good' : ratio >= 0.5 ? 'part' : 'bad';
   n.due = nextDue(n, res); save();
+  const left = notes.filter(x => x.due <= today()).sort((a, b) => a.due - b.due);
+  const nextInQueue = left[0], queueLeft = left.length;
 
   const box = h('div', {style:'line-height:2.2'});
   let k = 0;
@@ -441,10 +470,15 @@ function result(n, toks, keys, slots) {
     box,
     h('p', {style:'margin-top:16px'}, h('span', {class:'tag'}, `Sıradaki tekrar: ${fmt(n.due)}`)),
     h('p', {class:'hint'}, why),
-    h('div', {class:'row'}, h('button', {onclick: home}, 'Ana sayfa'))));
+    h('div', {class:'row'},
+      nextInQueue ? h('button', {onclick: () => review(nextInQueue.id)}, `Sıradaki tekrar (${queueLeft})`) : null,
+      h('button', {class: nextInQueue ? 'alt' : '', onclick: home}, 'Ana sayfa'))));
 }
 
 home();
+
+/* Ana ekrana eklenebilir uygulama + internetsiz açılış */
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
 </script>
 </body>
 </html>
