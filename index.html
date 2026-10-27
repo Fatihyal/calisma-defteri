@@ -111,9 +111,15 @@ function micButton(target) {
     'no-speech': 'Ses duyulmadı.'
   };
   const begin = () => {
-    rec = new SR(); rec.lang = 'tr-TR'; rec.continuous = true; rec.interimResults = false;
+    rec = new SR(); rec.lang = 'tr-TR'; rec.interimResults = true;
+    rec.continuous = !/Android/i.test(navigator.userAgent);  // Android'de sürekli mod cümleleri tekrarlıyor
+    const base = target.value;  // bu oturumdan önceki yazı
     rec.onstart = () => { status.textContent = ''; };
-    rec.onresult = e => { for (let i = e.resultIndex; i < e.results.length; i++) if (e.results[i].isFinal) target.value = (target.value + ' ' + e.results[i][0].transcript).trim(); };
+    rec.onresult = e => {  // her seferinde oturumun tamamından yeniden kur; hiçbir cümle kaybolmaz
+      let txt = '';
+      for (let i = 0; i < e.results.length; i++) txt += e.results[i][0].transcript + ' ';
+      target.value = (base + ' ' + txt).trim();
+    };
     rec.onerror = ev => {
       status.textContent = ERR[ev.error] || ('Hata: ' + ev.error);
       if (ev.error !== 'no-speech') { on = false; ui(); }
