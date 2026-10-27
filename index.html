@@ -214,16 +214,24 @@ function home() {
   const parts = [];
 
   if (!notes.length) {
-    parts.push(h('div', {class:'card'}, h('h2', {}, 'Hoş geldin'), howSteps(),
-      h('p', {class:'hint'}, 'Daha fazla bilgi için üstteki "Nasıl çalışır?" düğmesine dokun.')));
+    parts.push(h('div', {class:'card', style:'text-align:center'},
+      h('h2', {}, 'Bir konuyu çalış, unutmadan hatırla'),
+      h('p', {class:'hint'}, 'Çalıştığın konuyu sonra sana ben tekrar sorarım.'),
+      h('button', {class:'start', style:'margin-top:8px', onclick: () => addNote()}, 'Başla: ilk konunu seç'),
+      h('ol', {class:'how', style:'text-align:left;margin-top:20px'},
+        h('li', {}, h('b', {}, 'Konuyu seç. '), 'Dersini ve konunu seçersin.'),
+        h('li', {}, h('b', {}, 'Oku, kitabı kapat, anlat. '), 'Kendi cümlelerinle konuşur ya da yazarsın.'),
+        h('li', {}, h('b', {}, 'Birkaç gün sonra hatırla. '), 'Uygulama seni yeniden yoklar.')),
+      h('p', {class:'hint', style:'margin-bottom:0'}, 'Daha fazlası için üstteki "Nasıl çalışır?" düğmesine dokun.')));
   } else {
     if (due.length) {
-      parts.push(h('div', {style:'margin-bottom:18px'},
-        h('button', {class:'start', onclick: () => review(due[0].id)}, `Bugünkü tekrarı başlat (${due.length})`),
-        h('p', {class:'hint', style:'text-align:center'}, 'Sırayla notlarını tekrar edersin. Bitince sıradaki otomatik gelir.')));
+      parts.push(h('div', {class:'card', style:'text-align:center'},
+        h('h2', {}, `Hatırlama zamanı: ${due.length} konu bekliyor`),
+        h('button', {class:'start', onclick: () => review(due[0].id)}, 'Başla'),
+        h('p', {class:'hint', style:'margin-bottom:0'}, 'Konuları sırayla hatırlamaya çalışırsın. Biri bitince sıradaki gelir.')));
     } else {
-      parts.push(h('div', {class:'card', style:'text-align:center'}, h('h2', {style:'margin:0'}, 'Bugünlük tekrar yok'),
-        h('p', {class:'hint', style:'margin:4px 0 0'}, 'İstersen yeni bir konu ekleyebilirsin.')));
+      parts.push(h('div', {class:'card', style:'text-align:center'}, h('h2', {style:'margin:0'}, 'Bugün hatırlanacak konu yok'),
+        h('p', {class:'hint', style:'margin:4px 0 0'}, 'İstersen yeni bir konu çalışabilirsin.')));
     }
     const week = h('div', {class:'week'}, [0,1,2,3,4,5,6].map(i => {
       const d = t + i;
@@ -231,13 +239,13 @@ function home() {
       const label = i === 0 ? 'Bugün' : i === 1 ? 'Yarın' : dayToDate(d).toLocaleDateString('tr-TR', {weekday:'short'});
       return h('div', {class:'day' + (c ? ' has' : '') + (i === 0 ? ' today' : '')}, h('small', {}, label), h('b', {}, String(c)));
     }));
-    parts.push(week, h('p', {class:'hint', style:'margin:0 0 18px'}, 'Önümüzdeki 7 gün: her kutu o gün kaç tekrarın olduğunu gösterir.'));
+    parts.push(week, h('p', {class:'hint', style:'margin:0 0 18px'}, 'Önümüzdeki 7 gün: her kutu o gün kaç konuyu hatırlayacağını gösterir.'));
   }
-  parts.push(h('div', {class:'row', style:'margin:0 0 18px'}, h('button', {class: notes.length && due.length ? 'alt big' : 'big', onclick: () => addNote()}, '+ Yeni not ekle')));
+  if (notes.length) parts.push(h('div', {class:'row', style:'margin:0 0 18px'}, h('button', {class: due.length ? 'alt big' : 'big', onclick: () => addNote()}, 'Yeni bir konu çalış')));
   const exams = Object.entries(EXAMS).map(([d, v]) => ({d, day: dateInputToDay(v)})).filter(x => x.day >= t).sort((a, b) => a.day - b.day);
   if (exams.length) {
     const ec = h('div', {class:'card'}, h('h2', {}, 'Yaklaşan sınavlar'),
-      h('p', {class:'hint'}, 'Bir derse not eklerken sınav tarihi otomatik seçilir, tekrarlar sınava göre ayarlanır.'));
+      h('p', {class:'hint'}, 'Bir derse konu eklerken sınav tarihi otomatik seçilir, tekrarlar sınava göre ayarlanır.'));
     exams.forEach(x => {
       const left = x.day - t;
       ec.append(h('div', {class:'item'}, h('div', {}, h('strong', {}, x.d), h('small', {}, fmt(x.day))),
@@ -247,21 +255,21 @@ function home() {
   }
 
   if (notes.length) {
-    const dueCard = h('div', {class:'card'}, h('h2', {}, 'Bugün tekrar'),
-      h('p', {class:'hint'}, 'Bu notların tekrar günü geldi. Önce hiçbir yere bakmadan aklında kalanı anlat.'));
-    if (!due.length) dueCard.append(h('div', {class:'empty'}, 'Bugünlük tekrar yok. Güzel!'));
+    const dueCard = h('div', {class:'card'}, h('h2', {}, 'Hatırlama günü gelen konular'),
+      h('p', {class:'hint'}, 'Hangisinden başlamak istersen ona dokun. Önce hiçbir yere bakmadan aklında kalanı anlat.'));
+    if (!due.length) dueCard.append(h('div', {class:'empty'}, 'Bugünlük hatırlanacak konu yok. Güzel!'));
     due.forEach(n => dueCard.append(h('div', {class:'item'},
       h('div', {}, h('strong', {}, n.soru), h('small', {}, n.ders)),
-      h('button', {onclick: () => review(n.id)}, 'Tekrar et'))));
+      h('button', {onclick: () => review(n.id)}, 'Başla'))));
     parts.push(dueCard);
   }
 
   if (rest.length) {
-    const restCard = h('div', {class:'card'}, h('h2', {}, 'Sonraki günler'),
-      h('p', {class:'hint'}, 'Bu notların tekrar günü henüz gelmedi. Vakti gelince yukarıya çıkarlar.'));
+    const restCard = h('div', {class:'card'}, h('h2', {}, 'Sıradaki tekrarlarım'),
+      h('p', {class:'hint'}, 'Bu konuların hatırlama günü henüz gelmedi. Vakti gelince yukarıya çıkarlar.'));
     rest.forEach(n => restCard.append(h('div', {class:'item'},
       h('div', {}, h('strong', {}, n.soru), h('small', {}, `${n.ders} · tekrar: ${fmt(n.due)}`)),
-      h('button', {class:'danger', onclick: () => { if (confirm('Bu not silinsin mi?')) { notes = notes.filter(x => x.id !== n.id); save(); home(); } }}, 'Sil'))));
+      h('button', {class:'danger', onclick: () => { if (confirm('Bu konu silinsin mi?')) { notes = notes.filter(x => x.id !== n.id); save(); home(); } }}, 'Sil'))));
     parts.push(restCard);
   }
 
@@ -439,7 +447,7 @@ function review(id) {
     h('p', {class:'big'}, n.soru),
     tip('Hiçbir yere bakma. Aklında kalanı söyle ya da yaz. Hatırlamakta zorlanman normal. Öğrenmeyi sağlayan da bu zorlanma. Yazdıkların kaydedilmez, sadece hatırlamayı çalıştırır.'),
     micButton(free), h('div', {style:'height:10px'}), free,
-    h('div', {class:'row'}, h('button', {onclick: () => blanks(n)}, 'Boşlukları göster'), h('button', {class:'alt', onclick: home}, 'Vazgeç'))));
+    h('div', {class:'row'}, h('button', {onclick: () => blanks(n)}, 'Boşlukları doldurmaya geç'), h('button', {class:'alt', onclick: home}, 'Vazgeç'))));
 }
 
 function blanks(n) {
