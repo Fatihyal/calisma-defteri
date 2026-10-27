@@ -234,6 +234,17 @@ function home() {
     parts.push(week, h('p', {class:'hint', style:'margin:0 0 18px'}, 'Önümüzdeki 7 gün: her kutu o gün kaç tekrarın olduğunu gösterir.'));
   }
   parts.push(h('div', {class:'row', style:'margin:0 0 18px'}, h('button', {class: notes.length && due.length ? 'alt big' : 'big', onclick: () => addNote()}, '+ Yeni not ekle')));
+  const exams = Object.entries(EXAMS).map(([d, v]) => ({d, day: dateInputToDay(v)})).filter(x => x.day >= t).sort((a, b) => a.day - b.day);
+  if (exams.length) {
+    const ec = h('div', {class:'card'}, h('h2', {}, 'Yaklaşan sınavlar'),
+      h('p', {class:'hint'}, 'Bir derse not eklerken sınav tarihi otomatik seçilir, tekrarlar sınava göre ayarlanır.'));
+    exams.forEach(x => {
+      const left = x.day - t;
+      ec.append(h('div', {class:'item'}, h('div', {}, h('strong', {}, x.d), h('small', {}, fmt(x.day))),
+        h('span', {class:'tag', style: left <= 3 ? 'background:#fbe6df;color:#8c3222' : ''}, left === 0 ? 'Bugün' : left === 1 ? 'Yarın' : `${left} gün kaldı`)));
+    });
+    parts.push(ec);
+  }
 
   if (notes.length) {
     const dueCard = h('div', {class:'card'}, h('h2', {}, 'Bugün tekrar'),
@@ -291,12 +302,12 @@ const CURRICULUM = {
     {unite:'1. Ünite: Gökyüzündeki Komşularımız ve Biz', q:[
       ['Güneş nasıl bir yapıdadır ve nasıl bir hareket yapar?', 's. 20-25'],
       ['Güneş, Dünya’dan çok büyük olduğu hâlde neden küçük görünür?', 's. 20-25'],
-      ['Ay’ın dönme ve dolanma hareketi nedir? Dünya’dan bakınca neden hep aynı yüzünü görürüz?', 's. 26-34'],
-      ['Ay’ın evreleri neden oluşur ve hangi sırayla görülür?', 's. 35-43'],
-      ['Güneş, Dünya ve Ay birbirine göre nasıl hareket eder, büyüklükleri nasıl karşılaştırılır?', 's. 44-49']]},
+      ['Ay’ın dönme ve dolanma hareketi nedir? Dünya’dan bakınca neden hep aynı yüzünü görürüz?', 's. 26-34', true],
+      ['Ay’ın evreleri neden oluşur ve hangi sırayla görülür?', 's. 35-43', true],
+      ['Güneş, Dünya ve Ay birbirine göre nasıl hareket eder, büyüklükleri nasıl karşılaştırılır?', 's. 44-49', true]]},
     {unite:'2. Ünite: Kuvveti Tanıyalım', q:[
-      ['Kuvvet nedir, nasıl ölçülür ve birimi nedir?', 's. 60-68'],
-      ['Dinamometre nasıl çalışır? Yayın kalınlığı neden önemlidir?', 's. 60-68'],
+      ['Kuvvet nedir, nasıl ölçülür ve birimi nedir?', 's. 60-68', true],
+      ['Dinamometre nasıl çalışır? Yayın kalınlığı neden önemlidir?', 's. 60-68', true],
       ['Kütle ile ağırlık arasındaki benzerlik ve farklar nelerdir?', 's. 70-76'],
       ['Bir cismin ağırlığı Ay’da neden Dünya’dakinden farklıdır?', 's. 70-76'],
       ['Sürtünme kuvveti nedir? Günlük hayatta hareketi nasıl kolaylaştırır ya da zorlaştırır?', 's. 78-89']]},
@@ -308,11 +319,11 @@ const CURRICULUM = {
   ],
   'Sosyal Bilgiler': [
     {unite:'1. Alan: Birlikte Yaşamak', q:[
-      ['Hangi gruplara dâhilsin ve bu gruplardaki rollerin birbiriyle nasıl ilişkili?', 's. 11-44'],
-      ['Farklı kültürel özelliklere saygı duymak birlikte yaşamayı nasıl etkiler?', 's. 11-44'],
-      ['Yardımlaşma ve dayanışma toplumsal birliği nasıl sürdürür?', 's. 11-44']]},
+      ['Hangi gruplara dâhilsin ve bu gruplardaki rollerin birbiriyle nasıl ilişkili?', 's. 11-44', true],
+      ['Farklı kültürel özelliklere saygı duymak birlikte yaşamayı nasıl etkiler?', 's. 11-44', true],
+      ['Yardımlaşma ve dayanışma toplumsal birliği nasıl sürdürür?', 's. 11-44', true]]},
     {unite:'2. Alan: Evimiz Dünya', q:[
-      ['Yaşadığın ilin konumunu komşu iller, yeryüzü şekilleri ve su kaynaklarına göre anlat.', 's. 50-57'],
+      ['Yaşadığın ilin konumunu komşu iller, yeryüzü şekilleri ve su kaynaklarına göre anlat.', 's. 50-57', true],
       ['Yaşadığın ilde doğal ve beşerî çevre geçmişten bugüne nasıl değişti? Nedenleri ve sonuçları neler?', 's. 58-69'],
       ['Yaşadığın ilde hangi afetler olabilir ve etkilerini azaltmak için neler yapılabilir?', 's. 70-81'],
       ['Ülkemizin kara sınırı olan komşu devletler hangileridir? Başkentleri ve konumları nedir?', 's. 82-92']]},
@@ -324,26 +335,41 @@ const CURRICULUM = {
   ]
 };
 
+/* Okulun 1. dönem 1. yazılı takvimi (kızın okulu, 27.10.2026'da girildi). Tarih: yıl-ay-gün */
+const EXAMS = {
+  'Fen Bilimleri':'2026-11-03', 'Matematik':'2026-11-05', 'Sosyal Bilgiler':'2026-11-06',
+  'Türkçe':'2026-11-10', 'İngilizce':'2026-11-12', 'Din Kültürü':'2026-11-13'
+};
+const upcomingExam = ders => { const v = EXAMS[ders]; if (!v) return null; const d = dateInputToDay(v); return d >= today() ? {v, d} : null; };
+
 const NEW_STEPS = ['Soru', 'Anlat', 'Kelimeler'];
 
 function addNote(draft = {step:1, ders:'', soru:'', ozet:'', keys:null, sinav:''}) {
   if (draft.step === 1) {
-    const dersler = [...new Set(['Türkçe','Matematik','Fen Bilimleri','Sosyal Bilgiler','İngilizce', ...notes.map(n => n.ders)])];
+    const dersler = [...new Set(['Türkçe','Matematik','Fen Bilimleri','Sosyal Bilgiler','İngilizce','Din Kültürü', ...notes.map(n => n.ders)])];
     let ders = draft.ders;
     const chips = h('div', {class:'chips'}), ready = h('div');
     const soru = h('input', {type:'text', value:draft.soru, placeholder:'Hazır sorulardan seç ya da kendin yaz'});
+    const sinav = h('input', {type:'date', value:draft.sinav});
+    const examInfo = h('p', {class:'hint'}), examBox = h('details', {});
+    const setExam = d => {
+      const ex = upcomingExam(d);
+      if (ex) { sinav.value = ex.v; examInfo.textContent = `${d} sınavı: ${fmt(ex.d)} (${ex.d - today()} gün kaldı). Tekrarlar bu tarihe göre ayarlanacak.`; examBox.open = true; }
+      else { sinav.value = ''; examInfo.textContent = 'Sınav tarihini seçersen tekrar günleri sınava göre ayarlanır. Sınavı yoksa boş bırak.'; }
+    };
     const paint = () => {
-      chips.replaceChildren(...dersler.map(d => h('span', {class:'chip' + (d === ders ? ' on' : ''), onclick: () => { ders = d; paint(); }}, d)));
+      chips.replaceChildren(...dersler.map(d => h('span', {class:'chip' + (d === ders ? ' on' : ''), onclick: () => { ders = d; setExam(d); paint(); }}, d)));
       ready.replaceChildren();
       const plan = CURRICULUM[ders];
       if (!plan) return;
       ready.append(h('label', {}, 'Hazır sorular (5. sınıf, 1. dönem)'),
-        h('p', {class:'hint', style:'margin-top:0'}, 'Bir üniteye dokun, sorular açılır. Bir soruya dokununca aşağıdaki kutuya yazılır. Sağdaki yazı, konunun ders kitabında hangi sayfalarda olduğunu gösterir.'));
+        h('p', {class:'hint', style:'margin-top:0'}, 'Bir üniteye dokun, sorular açılır. Bir soruya dokununca aşağıdaki kutuya yazılır. Sağdaki yazı, konunun ders kitabında hangi sayfalarda olduğunu gösterir. Sarı "1. yazılıda var" etiketi, MEB’in 1. yazılı konu listesinde bulunan sorulardır (okulun seçtiği senaryoya göre değişebilir, öğretmenine sor).'));
       plan.forEach(u => ready.append(h('details', {}, h('summary', {style:'color:var(--main-d);font-weight:600'}, u.unite),
-        u.q.map(([q, pg]) => h('div', {class:'item', style:'cursor:pointer', onclick: () => { soru.value = q; window.scrollTo(0, document.body.scrollHeight); }}, h('span', {}, q), h('small', {style:'white-space:nowrap;color:var(--soft)'}, 'Kitap ' + pg))))));
+        u.q.map(([q, pg, yazili]) => h('div', {class:'item', style:'cursor:pointer', onclick: () => { soru.value = q; window.scrollTo(0, document.body.scrollHeight); }}, h('span', {}, q, yazili ? h('span', {class:'tag', style:'margin-left:8px;font-size:15px;padding:1px 10px;background:#ffe9a8;color:#6b4e00'}, '1. yazılıda var') : null), h('small', {style:'white-space:nowrap;color:var(--soft)'}, 'Kitap ' + pg))))));
     };
     paint();
-    const sinav = h('input', {type:'date', value:draft.sinav});
+    if (ders && !draft.sinav) setExam(ders); else if (!ders) examInfo.textContent = 'Sınav tarihini seçersen tekrar günleri sınava göre ayarlanır. Sınavı yoksa boş bırak.';
+    examBox.append(h('summary', {}, 'Sınav günü (isteğe bağlı)'), examInfo, sinav);
     show(stepper(NEW_STEPS, 0), h('div', {class:'card'},
       h('h2', {}, '1. Hangi ders, hangi soru?'),
       tip('Okumaya başlamadan önce kendine bir soru sor. Okurken cevabı arayacaksın, bu da öğrendiğini aklında tutmana yardım eder.'),
@@ -351,8 +377,7 @@ function addNote(draft = {step:1, ders:'', soru:'', ozet:'', keys:null, sinav:''
       h('label', {}, 'Cevaplayacağın soru'),
       h('p', {class:'hint', style:'margin-top:0'}, 'Listeden seçebilir ya da kendin yazabilir, konuşarak da söyleyebilirsin.'),
       soru, micButton(soru),
-      h('details', {}, h('summary', {}, 'Sınav günü var mı? (isteğe bağlı)'),
-        h('p', {class:'hint'}, 'Sınav tarihini seçersen tekrar günleri sınava göre ayarlanır. Sınavı yoksa boş bırak.'), sinav),
+      examBox,
       h('div', {class:'row'}, h('button', {onclick: () => {
         if (!ders || !soru.value.trim()) return alert('Dersi seç ve soruyu yaz.');
         addNote({...draft, step:2, ders, soru:soru.value.trim(), sinav:sinav.value});
