@@ -7,33 +7,41 @@
 <style>
   :root { --bg:#f6f3ec; --card:#fff; --ink:#26303b; --soft:#6b7785; --main:#2f6f6a; --main-d:#245a56; --warn:#c2502f; --ok:#2e7d4f; --line:#e2ddd0; --mark:#ffe08a; }
   * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink); font:20px/1.55 "Segoe UI",system-ui,sans-serif; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:22px/1.5 "Segoe UI",system-ui,sans-serif; }
   header { background:var(--main); color:#fff; padding:14px 22px; display:flex; align-items:center; justify-content:space-between; }
   header h1 { font-size:24px; margin:0; font-weight:600; }
-  header button { background:transparent; color:#fff; border:1px solid #ffffff88; }
+  header button { background:transparent; color:#fff; border:1px solid #ffffff88; min-height:44px; padding:8px 16px; }
   main { max-width:820px; margin:0 auto; padding:20px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px; margin-bottom:16px; }
-  h2 { font-size:22px; margin:0 0 10px; }
-  p.hint { color:var(--soft); font-size:17px; margin:4px 0 12px; }
-  button { font:inherit; font-weight:600; padding:12px 20px; border-radius:12px; border:0; background:var(--main); color:#fff; cursor:pointer; min-height:48px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; margin-bottom:16px; }
+  h2 { font-size:24px; margin:0 0 10px; }
+  p.hint { color:var(--soft); font-size:19px; margin:4px 0 12px; }
+  button { font:inherit; font-weight:600; padding:14px 24px; border-radius:14px; border:0; background:var(--main); color:#fff; cursor:pointer; min-height:56px; }
   button.alt { background:#e8efee; color:var(--main-d); }
-  button.danger { background:#f7e3dc; color:var(--warn); }
-  button:disabled { opacity:.45; }
-  .row { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
-  input[type=text], input[type=date], select, textarea { font:inherit; width:100%; padding:12px; border:2px solid var(--line); border-radius:12px; background:#fff; color:var(--ink); }
-  textarea { min-height:170px; resize:vertical; }
-  label { display:block; font-weight:600; margin:14px 0 6px; }
-  .word { display:inline-block; padding:2px 5px; margin:2px 1px; border-radius:8px; cursor:pointer; }
+  button.danger { background:#f7e3dc; color:var(--warn); min-height:48px; padding:8px 16px; }
+  button.mic { background:#b8432f; width:100%; font-size:22px; margin-top:10px; }
+  button.mic.live { background:#2e7d4f; }
+  .row { display:flex; gap:12px; flex-wrap:wrap; margin-top:14px; }
+  input[type=text], input[type=date], textarea { font:inherit; width:100%; padding:14px; border:2px solid var(--line); border-radius:12px; background:#fff; color:var(--ink); }
+  textarea { min-height:190px; resize:vertical; }
+  label { display:block; font-weight:600; margin:16px 0 8px; }
+  .chips { display:flex; flex-wrap:wrap; gap:10px; }
+  .chip { padding:10px 18px; border-radius:999px; background:#e8efee; color:var(--main-d); font-weight:600; cursor:pointer; user-select:none; border:2px solid transparent; }
+  .chip.on { background:var(--main); color:#fff; }
+  .bank .chip { font-size:22px; padding:12px 20px; background:#fff; border-color:var(--main); }
+  .bank .chip.used { opacity:.25; pointer-events:none; }
+  .word { display:inline-block; padding:4px 7px; margin:3px 1px; border-radius:8px; cursor:pointer; }
   .word.on { background:var(--mark); font-weight:700; }
-  .item { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); }
+  .item { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 0; border-bottom:1px solid var(--line); }
   .item:last-child { border-bottom:0; }
-  .item small { color:var(--soft); display:block; font-size:16px; }
-  .blank { display:inline-block; width:auto; min-width:90px; padding:4px 8px; margin:2px; border-width:2px; font-size:19px; text-align:center; }
-  .good { color:var(--ok); font-weight:700; background:#e3f3e8; border-radius:6px; padding:0 4px; }
-  .bad { color:var(--warn); font-weight:700; background:#fbe6df; border-radius:6px; padding:0 4px; }
-  .big { font-size:26px; font-weight:700; }
-  .tag { display:inline-block; background:#e8efee; color:var(--main-d); border-radius:999px; padding:2px 12px; font-size:15px; font-weight:600; }
+  .item small { color:var(--soft); display:block; font-size:17px; }
+  .blank { display:inline-block; min-width:110px; padding:2px 12px; margin:2px; border-bottom:4px solid var(--main); background:#eef5f4; border-radius:8px; text-align:center; cursor:pointer; min-height:44px; }
+  .good { color:var(--ok); font-weight:700; background:#e3f3e8; border-radius:6px; padding:0 5px; }
+  .bad { color:var(--warn); font-weight:700; background:#fbe6df; border-radius:6px; padding:0 5px; }
+  .big { font-size:28px; font-weight:700; }
+  .tag { display:inline-block; background:#e8efee; color:var(--main-d); border-radius:999px; padding:4px 14px; font-size:18px; font-weight:600; }
   .empty { color:var(--soft); text-align:center; padding:18px 0; }
+  details { margin-top:14px; color:var(--soft); }
+  summary { cursor:pointer; padding:8px 0; }
 </style>
 </head>
 <body>
@@ -54,17 +62,16 @@ const tr = s => s.toLocaleLowerCase('tr');
 const tokens = text => text.match(/[\p{L}\p{N}]+|[^\p{L}\p{N}]+/gu) || [];
 const isWord = t => /[\p{L}\p{N}]/u.test(t);
 
-/* Tekrar aralığı: sınav varsa ilk aralık = kalan günün onda biri, sonra ikiye katlanır;
-   sınav yoksa 1-3-7-14-30-60 gün. */
+/* Tekrar aralığı: sınav günü varsa ilk aralık kalan günün onda biri, sonra ikiye katlanır;
+   yoksa 1-3-7-14-30-60 gün. */
 const LADDER = [1,3,7,14,30,60];
 function nextDue(n, result) {
   const t = today();
   if (result === 'bad') { n.step = 0; n.gap = 1; return t + 1; }
-  if (result === 'part') { return t + 2; }
+  if (result === 'part') return t + 2;
   n.step = (n.step || 0) + 1;
   if (n.sinav && n.sinav > t) {
-    const remaining = n.sinav - t;
-    const gap = n.gap ? n.gap * 2 : Math.max(1, Math.ceil(remaining / 10));
+    const gap = n.gap ? n.gap * 2 : Math.max(1, Math.ceil((n.sinav - t) / 10));
     n.gap = gap;
     return Math.min(t + gap, Math.max(t + 1, n.sinav - 1));
   }
@@ -83,20 +90,28 @@ function h(tag, attrs = {}, ...kids) {
   return e;
 }
 const app = document.getElementById('app');
-const show = (...els) => { app.replaceChildren(...els); window.scrollTo(0, 0); };
+let stopMic = null;
+const show = (...els) => { if (stopMic) stopMic(); app.replaceChildren(...els); window.scrollTo(0, 0); };
 document.getElementById('homeBtn').onclick = () => home();
 
-function lev(a, b) {
-  const d = Array.from({length: a.length+1}, (_, i) => [i]);
-  for (let j = 1; j <= b.length; j++) d[0][j] = j;
-  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++)
-    d[i][j] = Math.min(d[i-1][j]+1, d[i][j-1]+1, d[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1));
-  return d[a.length][b.length];
+/* Sesle yazma: Chrome'un konuşma tanıma özelliği (internet gerekir) */
+function micButton(target) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return h('p', {class:'hint'}, 'Bu tarayıcıda sesle yazma yok. Klavyedeki mikrofon simgesine dokunarak da konuşabilirsin.');
+  let rec = null, on = false;
+  const btn = h('button', {class:'mic', type:'button'}, 'Konuşarak yaz');
+  const ui = () => { btn.classList.toggle('live', on); btn.textContent = on ? 'Dinliyorum... bitince dokun' : 'Konuşarak yaz'; };
+  const begin = () => {
+    rec = new SR(); rec.lang = 'tr-TR'; rec.continuous = true; rec.interimResults = false;
+    rec.onresult = e => { for (let i = e.resultIndex; i < e.results.length; i++) if (e.results[i].isFinal) target.value = (target.value + ' ' + e.results[i][0].transcript).trim(); };
+    rec.onerror = ev => { if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') { on = false; ui(); alert('Mikrofon izni verilmedi. Tarayıcı ayarlarından izin vermelisin.'); } };
+    rec.onend = () => { if (on) { try { rec.start(); } catch { on = false; ui(); } } else ui(); };
+    rec.start();
+  };
+  const stop = () => { on = false; if (rec) { try { rec.stop(); } catch {} } ui(); };
+  btn.onclick = () => { if (on) stop(); else { on = true; ui(); begin(); stopMic = stop; } };
+  return btn;
 }
-const matches = (given, answer) => {
-  const g = tr(given.trim()), a = tr(answer);
-  return g === a || (a.length >= 5 && g.length > 0 && lev(g, a) <= 1);
-};
 
 /* ---------- Ana sayfa ---------- */
 function home() {
@@ -104,30 +119,29 @@ function home() {
   const due = notes.filter(n => n.due <= t).sort((a,b) => a.due - b.due);
   const rest = notes.filter(n => n.due > t).sort((a,b) => a.due - b.due);
 
-  const dueCard = h('div', {class:'card'}, h('h2', {}, 'Bugün tekrar edilecekler'));
-  if (!due.length) dueCard.append(h('div', {class:'empty'}, notes.length ? 'Bugünlük tekrar yok. Güzel!' : 'Henüz not yok. İlk notunu ekleyerek başla.'));
+  const dueCard = h('div', {class:'card'}, h('h2', {}, 'Bugün tekrar'));
+  if (!due.length) dueCard.append(h('div', {class:'empty'}, notes.length ? 'Bugünlük tekrar yok. Güzel!' : 'Henüz not yok. Aşağıdaki düğmeyle başla.'));
   due.forEach(n => dueCard.append(h('div', {class:'item'},
     h('div', {}, h('strong', {}, n.soru), h('small', {}, n.ders)),
     h('button', {onclick: () => review(n.id)}, 'Tekrar et'))));
 
-  const restCard = h('div', {class:'card'}, h('h2', {}, 'Tüm notlarım'));
-  if (!rest.length) restCard.append(h('div', {class:'empty'}, 'Başka not yok.'));
-  rest.forEach(n => restCard.append(h('div', {class:'item'},
-    h('div', {}, h('strong', {}, n.soru), h('small', {}, `${n.ders} · sıradaki tekrar: ${fmt(n.due)}`)),
-    h('button', {class:'danger', onclick: () => { if (confirm('Bu not silinsin mi?')) { notes = notes.filter(x => x.id !== n.id); save(); home(); } }}, 'Sil'))));
-
-  const tools = h('div', {class:'row'},
-    h('button', {class:'alt', onclick: backup}, 'Yedek al'),
-    h('button', {class:'alt', onclick: () => fileIn.click()}, 'Yedek yükle'));
   const fileIn = h('input', {type:'file', accept:'.json', style:'display:none', onchange: restore});
+  const parts = [h('div', {class:'row', style:'margin:0 0 16px'}, h('button', {class:'big', onclick: () => addNote()}, '+ Yeni not')), dueCard];
 
-  show(h('div', {class:'row', style:'margin:0 0 16px'}, h('button', {class:'big', onclick: () => addNote()}, '+ Yeni not ekle')),
-       dueCard, restCard, tools, fileIn);
+  if (rest.length) {
+    const restCard = h('div', {class:'card'}, h('h2', {}, 'Sonraki günler'));
+    rest.forEach(n => restCard.append(h('div', {class:'item'},
+      h('div', {}, h('strong', {}, n.soru), h('small', {}, `${n.ders} · tekrar: ${fmt(n.due)}`)),
+      h('button', {class:'danger', onclick: () => { if (confirm('Bu not silinsin mi?')) { notes = notes.filter(x => x.id !== n.id); save(); home(); } }}, 'Sil'))));
+    parts.push(restCard);
+  }
+  parts.push(h('details', {}, h('summary', {}, 'Yedekleme (ebeveyn için)'),
+    h('div', {class:'row'}, h('button', {class:'alt', onclick: backup}, 'Yedek al'), h('button', {class:'alt', onclick: () => fileIn.click()}, 'Yedek yükle'))), fileIn);
+  show(...parts);
 }
 
 function backup() {
-  const a = h('a', {href: URL.createObjectURL(new Blob([JSON.stringify(notes)], {type:'application/json'})), download:`calisma-defteri-yedek-${today()}.json`});
-  a.click();
+  h('a', {href: URL.createObjectURL(new Blob([JSON.stringify(notes)], {type:'application/json'})), download:`calisma-defteri-yedek-${today()}.json`}).click();
 }
 function restore(e) {
   const f = e.target.files[0]; if (!f) return;
@@ -140,44 +154,52 @@ function restore(e) {
   });
 }
 
-/* ---------- Yeni not: 3 adım ---------- */
-function addNote(draft = {step:1, ders:'', soru:'', ozet:'', keys:[], sinav:''}) {
+/* ---------- Yeni not: 3 kısa adım ---------- */
+const STOP = new Set(['çünkü','ancak','fakat','ayrıca','böylece','bunun','bunlar','onlar','kadar','olarak','yüzden','sonra','gibi','daha','ama','için','veya','ile','olan','olur','oluyor','yapar','bütün','birçok']);
+function suggestKeys(text) {
+  const toks = tokens(text), seen = new Set(), cands = [];
+  toks.forEach((tk, i) => { const w = tr(tk); if (isWord(tk) && tk.length >= 6 && !STOP.has(w) && !seen.has(w) && !/^\d+$/.test(tk)) { seen.add(w); cands.push({i, len:tk.length}); } });
+  return cands.sort((a, b) => b.len - a.len).slice(0, 6).map(c => c.i);
+}
+
+function addNote(draft = {step:1, ders:'', soru:'', ozet:'', keys:null, sinav:''}) {
   if (draft.step === 1) {
-    const dersler = [...new Set(notes.map(n => n.ders))];
-    const list = h('datalist', {id:'dersler'}, dersler.map(d => h('option', {value:d})));
-    const ders = h('input', {type:'text', list:'dersler', value:draft.ders, placeholder:'Örn. Fen Bilimleri'});
+    const dersler = [...new Set(['Türkçe','Matematik','Fen Bilimleri','Sosyal Bilgiler','İngilizce', ...notes.map(n => n.ders)])];
+    let ders = draft.ders;
+    const chips = h('div', {class:'chips'});
+    const paint = () => chips.replaceChildren(...dersler.map(d => h('span', {class:'chip' + (d === ders ? ' on' : ''), onclick: () => { ders = d; paint(); }}, d)));
+    paint();
     const soru = h('input', {type:'text', value:draft.soru, placeholder:'Örn. Mevsimler neden oluşur?'});
     const sinav = h('input', {type:'date', value:draft.sinav});
     show(h('div', {class:'card'},
-      h('h2', {}, '1. Önce bir soru sor'),
-      h('p', {class:'hint'}, 'Konu başlığını soruya çevir. Okurken cevabını arayacaksın; bu, aklında kalmasına yardım eder.'),
-      h('label', {}, 'Ders'), ders, list,
-      h('label', {}, 'Sorun'), soru,
-      h('label', {}, 'Sınav günü (biliyorsan)'), sinav,
-      h('p', {class:'hint'}, 'Sınav günü girersen tekrarlar ona göre ayarlanır.'),
+      h('h2', {}, '1. Hangi ders, hangi soru?'),
+      h('label', {}, 'Ders'), chips,
+      h('label', {}, 'Konu başlığını soruya çevir'), soru,
+      micButton(soru),
+      h('details', {}, h('summary', {}, 'Sınav günü var mı? (isteğe bağlı)'), sinav),
       h('div', {class:'row'}, h('button', {onclick: () => {
-        if (!ders.value.trim() || !soru.value.trim()) return alert('Ders ve soru boş olmasın.');
-        addNote({...draft, step:2, ders:ders.value.trim(), soru:soru.value.trim(), sinav:sinav.value});
-      }}, 'Devam: okumaya geç'))));
+        if (!ders || !soru.value.trim()) return alert('Dersi seç ve soruyu yaz.');
+        addNote({...draft, step:2, ders, soru:soru.value.trim(), sinav:sinav.value});
+      }}, 'Devam'))));
   } else if (draft.step === 2) {
-    const ozet = h('textarea', {placeholder:'Kendi cümlelerinle yaz...'}, draft.ozet);
+    const ozet = h('textarea', {placeholder:'Kendi cümlelerinle anlat...'}, draft.ozet);
     show(h('div', {class:'card'},
       h('h2', {}, '2. Oku, kapat, anlat'),
       h('p', {class:'big'}, draft.soru),
-      h('p', {class:'hint'}, 'Konuyu oku. Sonra kitabı veya defteri KAPAT ve bu soruya cevabı bir arkadaşına anlatır gibi kendi cümlelerinle yaz. Takıldığın yeri sonra kitaptan bakıp tamamlayabilirsin.'),
-      ozet,
+      h('p', {class:'hint'}, 'Konuyu oku. Sonra kitabı KAPAT ve cevabı bir arkadaşına anlatır gibi söyle ya da yaz.'),
+      micButton(ozet), ozet,
       h('div', {class:'row'},
         h('button', {class:'alt', onclick: () => addNote({...draft, step:1, ozet:ozet.value})}, 'Geri'),
         h('button', {onclick: () => {
-          if (ozet.value.trim().split(/\s+/).length < 8) return alert('Biraz daha yaz. En az bir iki cümle olsun.');
-          addNote({...draft, step:3, ozet:ozet.value.trim()});
-        }}, 'Devam: önemli kelimeler'))));
+          if (ozet.value.trim().split(/\s+/).length < 8) return alert('Biraz daha anlat. En az bir iki cümle olsun.');
+          addNote({...draft, step:3, ozet:ozet.value.trim(), keys: draft.ozet === ozet.value.trim() ? draft.keys : null});
+        }}, 'Devam'))));
   } else {
     const toks = tokens(draft.ozet);
-    const keys = new Set(draft.keys);
+    const keys = new Set(draft.keys || suggestKeys(draft.ozet));
     const counter = h('p', {class:'hint'});
-    const upd = () => { counter.textContent = `${keys.size} kelime seçili. İdeal: 4 ile 10 arası.`; };
-    const box = h('div', {style:'line-height:2.2'});
+    const upd = () => { counter.textContent = `${keys.size} kelime seçili.`; };
+    const box = h('div', {style:'line-height:2.3'});
     toks.forEach((tk, i) => {
       if (!isWord(tk)) return box.append(tk);
       const w = h('span', {class:'word' + (keys.has(i) ? ' on' : ''), onclick: () => { keys.has(i) ? keys.delete(i) : keys.add(i); w.classList.toggle('on'); upd(); }}, tk);
@@ -185,8 +207,8 @@ function addNote(draft = {step:1, ders:'', soru:'', ozet:'', keys:[], sinav:''})
     });
     upd();
     show(h('div', {class:'card'},
-      h('h2', {}, '3. Önemli kelimeleri seç'),
-      h('p', {class:'hint'}, 'Tekrar günü bu kelimeler boşluk olacak. Konuyu en iyi anlatan kelimelere dokun: terimler, isimler, sayılar.'),
+      h('h2', {}, '3. Önemli kelimeler'),
+      h('p', {class:'hint'}, 'Sarı kelimeleri önerdim. Tekrar günü bunlar boşluk olacak. İstersen dokunarak değiştir.'),
       box, counter,
       h('div', {class:'row'},
         h('button', {class:'alt', onclick: () => addNote({...draft, step:2, keys:[...keys]})}, 'Geri'),
@@ -204,36 +226,50 @@ function addNote(draft = {step:1, ders:'', soru:'', ozet:'', keys:[], sinav:''})
   }
 }
 
-/* ---------- Tekrar ---------- */
+/* ---------- Tekrar: önce anlat, sonra boşlukları kelimelerle doldur ---------- */
 function review(id) {
   const n = notes.find(x => x.id === id);
-  const free = h('textarea', {placeholder:'Aklında kalanları yaz...'});
+  const free = h('textarea', {placeholder:'Aklında kalanları anlat...'});
   show(h('div', {class:'card'},
     h('h2', {}, n.ders),
     h('p', {class:'big'}, n.soru),
-    h('p', {class:'hint'}, 'Hiçbir yere bakma. Bu soruya aklında kalanı kendi cümlelerinle yaz. Zorlanman normal, öğrenmeyi sağlayan da bu zorlanma.'),
-    free,
+    h('p', {class:'hint'}, 'Hiçbir yere bakma. Aklında kalanı söyle ya da yaz. Zorlanman normal, öğrenmeyi sağlayan da bu.'),
+    micButton(free), free,
     h('div', {class:'row'}, h('button', {onclick: () => blanks(n)}, 'Boşlukları göster'), h('button', {class:'alt', onclick: home}, 'Vazgeç'))));
 }
 
 function blanks(n) {
-  const toks = tokens(n.ozet), keys = new Set(n.keys), inputs = [];
-  const box = h('div', {style:'line-height:2.4'});
-  toks.forEach((tk, i) => {
-    if (!keys.has(i)) return box.append(tk);
-    const inp = h('input', {type:'text', class:'blank', autocapitalize:'off', autocomplete:'off', style:`width:${Math.max(90, tk.length*14)}px`});
-    inputs.push({inp, ans:tk}); box.append(inp);
-  });
+  const toks = tokens(n.ozet), keys = new Set(n.keys);
+  const slots = [];  // her boşluk: {ans, filled: kelime ya da null}
+  toks.forEach((tk, i) => { if (keys.has(i)) slots.push({ans:tk, filled:null}); });
+  const bank = slots.map(s => ({w:s.ans, used:false})).sort(() => Math.random() - .5);
+  const boxEl = h('div', {style:'line-height:2.5'}), bankEl = h('div', {class:'chips bank', style:'margin-top:18px'});
+  const okBtn = h('button', {disabled:true}, 'Kontrol et');
+  const paint = () => {
+    boxEl.replaceChildren(); let k = 0;
+    toks.forEach((tk, i) => {
+      if (!keys.has(i)) return boxEl.append(tk);
+      const s = slots[k++];
+      boxEl.append(h('span', {class:'blank', onclick: () => { if (!s.filled) return; s.filled = null; bank.forEach(b => { if (b.slot === s) { b.used = false; b.slot = null; } }); paint(); }}, s.filled || '      '));
+    });
+    bankEl.replaceChildren(...bank.map(b => h('span', {class:'chip' + (b.used ? ' used' : ''), onclick: () => {
+      const s = slots.find(x => !x.filled); if (!s) return;
+      s.filled = b.w; b.used = true; b.slot = s; paint();
+    }}, b.w)));
+    okBtn.disabled = slots.some(s => !s.filled);
+  };
+  okBtn.onclick = () => result(n, toks, keys, slots);
+  paint();
   show(h('div', {class:'card'},
     h('h2', {}, 'Boşlukları doldur'),
-    h('p', {class:'hint'}, 'Kendi özetinden kelimeler silindi. Hatırladığını yaz, bilmediğini boş bırak.'),
-    box,
-    h('div', {class:'row'}, h('button', {onclick: () => result(n, toks, keys, inputs)}, 'Kontrol et'))));
+    h('p', {class:'hint'}, 'Aşağıdaki kelimelere dokunarak boşlukları sırayla doldur. Yanlış koyduysan boşluğa dokun, geri gelir.'),
+    boxEl, bankEl,
+    h('div', {class:'row'}, okBtn)));
 }
 
-function result(n, toks, keys, inputs) {
-  const right = inputs.filter(({inp, ans}) => matches(inp.value, ans)).length;
-  const ratio = right / inputs.length;
+function result(n, toks, keys, slots) {
+  const right = slots.filter(s => tr(s.filled) === tr(s.ans)).length;
+  const ratio = right / slots.length;
   const res = ratio >= 0.8 ? 'good' : ratio >= 0.5 ? 'part' : 'bad';
   n.due = nextDue(n, res); save();
 
@@ -241,15 +277,14 @@ function result(n, toks, keys, inputs) {
   let k = 0;
   toks.forEach((tk, i) => {
     if (!keys.has(i)) return box.append(tk);
-    const ok = matches(inputs[k].inp.value, tk);
-    box.append(h('span', {class: ok ? 'good' : 'bad'}, tk));
-    k++;
+    const s = slots[k++];
+    box.append(h('span', {class: tr(s.filled) === tr(s.ans) ? 'good' : 'bad'}, tk));
   });
   const msg = { good:'Çok iyi, yol açılıyor.', part:'Fena değil. Biraz daha pekiştirelim.', bad:'Zorlandın, sorun yok. Zorlanmak öğrenmenin parçası. Yarın yine bakacağız.' }[res];
   show(h('div', {class:'card'},
-    h('h2', {}, `${right} / ${inputs.length} doğru`),
+    h('h2', {}, `${right} / ${slots.length} doğru`),
     h('p', {class:'big'}, msg),
-    h('p', {class:'hint'}, 'Yeşiller bildiklerin, kırmızılar kaçırdıkların. Özetinin tamamı:'),
+    h('p', {class:'hint'}, 'Yeşiller bildiklerin, kırmızılar kaçırdıkların. Özetin:'),
     box,
     h('p', {}, h('span', {class:'tag'}, `Sıradaki tekrar: ${fmt(n.due)}`)),
     h('div', {class:'row'}, h('button', {onclick: home}, 'Ana sayfa'))));
