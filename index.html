@@ -186,43 +186,43 @@ function suggestKeys(text) {
 }
 
 /* Hazır sorular: 5. sınıf, 2026-2027 1. dönem. Kaynak: MEB Türkiye Yüzyılı Maarif Modeli
-   öğretim programları (tymm.meb.gov.tr), öğrenme çıktılarından kısaltılmıştır. Cevap verilmez;
+   öğretim programları ve 5. sınıf 1. kitapları (tymm.meb.gov.tr). Sayfa numaraları kitabın basılı numarasıdır, baskıya göre 1-2 sayfa kayabilir. Cevap verilmez;
    çocuk konuyu ders kitabından okur ve kendi cümleleriyle anlatır. */
 const CURRICULUM = {
   'Fen Bilimleri': [
     {unite:'1. Ünite: Gökyüzündeki Komşularımız ve Biz', q:[
-      'Güneş nasıl bir yapıdadır ve nasıl bir hareket yapar?',
-      'Güneş, Dünya\'dan çok büyük olduğu hâlde neden küçük görünür?',
-      'Ay\'ın dönme ve dolanma hareketi nedir? Dünya\'dan bakınca neden hep aynı yüzünü görürüz?',
-      'Ay\'ın evreleri neden oluşur ve hangi sırayla görülür?',
-      'Güneş, Dünya ve Ay birbirine göre nasıl hareket eder, büyüklükleri nasıl karşılaştırılır?']},
+      ['Güneş nasıl bir yapıdadır ve nasıl bir hareket yapar?', 's. 20-25'],
+      ['Güneş, Dünya’dan çok büyük olduğu hâlde neden küçük görünür?', 's. 20-25'],
+      ['Ay’ın dönme ve dolanma hareketi nedir? Dünya’dan bakınca neden hep aynı yüzünü görürüz?', 's. 26-34'],
+      ['Ay’ın evreleri neden oluşur ve hangi sırayla görülür?', 's. 35-43'],
+      ['Güneş, Dünya ve Ay birbirine göre nasıl hareket eder, büyüklükleri nasıl karşılaştırılır?', 's. 44-49']]},
     {unite:'2. Ünite: Kuvveti Tanıyalım', q:[
-      'Kuvvet nedir, nasıl ölçülür ve birimi nedir?',
-      'Dinamometre nasıl çalışır? Yayın kalınlığı neden önemlidir?',
-      'Kütle ile ağırlık arasındaki benzerlik ve farklar nelerdir?',
-      'Bir cismin ağırlığı Ay\'da neden Dünya\'dakinden farklıdır?',
-      'Sürtünme kuvveti nedir? Günlük hayatta hareketi nasıl kolaylaştırır ya da zorlaştırır?']},
+      ['Kuvvet nedir, nasıl ölçülür ve birimi nedir?', 's. 60-68'],
+      ['Dinamometre nasıl çalışır? Yayın kalınlığı neden önemlidir?', 's. 60-68'],
+      ['Kütle ile ağırlık arasındaki benzerlik ve farklar nelerdir?', 's. 70-76'],
+      ['Bir cismin ağırlığı Ay’da neden Dünya’dakinden farklıdır?', 's. 70-76'],
+      ['Sürtünme kuvveti nedir? Günlük hayatta hareketi nasıl kolaylaştırır ya da zorlaştırır?', 's. 78-89']]},
     {unite:'3. Ünite: Canlıların Yapısına Yolculuk', q:[
-      'Bitki ve hayvan hücrelerinin benzer ve farklı yönleri nelerdir?',
-      'Hücre, doku, organ, sistem ve organizma arasındaki ilişki nedir?',
-      'Destek ve hareket sistemini hangi yapılar oluşturur? Kemik, eklem ve kas çeşitleri nelerdir?',
-      'Destek ve hareket sistemimizin sağlığı için neler yapmalıyız?']}
+      ['Bitki ve hayvan hücrelerinin benzer ve farklı yönleri nelerdir?', 's. 100-110'],
+      ['Hücre, doku, organ, sistem ve organizma arasındaki ilişki nedir?', 's. 111-115'],
+      ['Destek ve hareket sistemini hangi yapılar oluşturur? Kemik, eklem ve kas çeşitleri nelerdir?', 's. 117-128'],
+      ['Destek ve hareket sistemimizin sağlığı için neler yapmalıyız?', 's. 129-135']]}
   ],
   'Sosyal Bilgiler': [
     {unite:'1. Alan: Birlikte Yaşamak', q:[
-      'Hangi gruplara dâhilsin ve bu gruplardaki rollerin birbiriyle nasıl ilişkili?',
-      'Farklı kültürel özelliklere saygı duymak birlikte yaşamayı nasıl etkiler?',
-      'Yardımlaşma ve dayanışma toplumsal birliği nasıl sürdürür?']},
+      ['Hangi gruplara dâhilsin ve bu gruplardaki rollerin birbiriyle nasıl ilişkili?', 's. 11-44'],
+      ['Farklı kültürel özelliklere saygı duymak birlikte yaşamayı nasıl etkiler?', 's. 11-44'],
+      ['Yardımlaşma ve dayanışma toplumsal birliği nasıl sürdürür?', 's. 11-44']]},
     {unite:'2. Alan: Evimiz Dünya', q:[
-      'Yaşadığın ilin konumunu komşu iller, yeryüzü şekilleri ve su kaynaklarına göre anlat.',
-      'Yaşadığın ilde doğal ve beşerî çevre geçmişten bugüne nasıl değişti? Nedenleri ve sonuçları neler?',
-      'Yaşadığın ilde hangi afetler olabilir ve etkilerini azaltmak için neler yapılabilir?',
-      'Ülkemizin kara sınırı olan komşu devletler hangileridir? Başkentleri ve konumları nedir?']},
+      ['Yaşadığın ilin konumunu komşu iller, yeryüzü şekilleri ve su kaynaklarına göre anlat.', 's. 50-57'],
+      ['Yaşadığın ilde doğal ve beşerî çevre geçmişten bugüne nasıl değişti? Nedenleri ve sonuçları neler?', 's. 58-69'],
+      ['Yaşadığın ilde hangi afetler olabilir ve etkilerini azaltmak için neler yapılabilir?', 's. 70-81'],
+      ['Ülkemizin kara sınırı olan komşu devletler hangileridir? Başkentleri ve konumları nedir?', 's. 82-92']]},
     {unite:'3. Alan: Ortak Mirasımız', q:[
-      'Somut ve somut olmayan kültürel miras nedir? Ortak miras neden korunmalıdır?',
-      'Anadolu\'nun ilk yerleşim yerlerinde (Çayönü, Çatalhöyük, Hacılar) insanlar nasıl yaşıyordu?',
-      'İlk yerleşimlerdeki beslenme, barınma ve geçim ile bugünkü hayat arasındaki benzerlik ve farklar nelerdir?',
-      'Mezopotamya ve Anadolu medeniyetleri ortak mirasa neler katmıştır?']}
+      ['Somut ve somut olmayan kültürel miras nedir? Ortak miras neden korunmalıdır?', 's. 100-109'],
+      ['Anadolu’nun ilk yerleşim yerlerinde (Çayönü, Çatalhöyük, Hacılar) insanlar nasıl yaşıyordu?', 's. 110-127'],
+      ['İlk yerleşimlerdeki beslenme, barınma ve geçim ile bugünkü hayat arasındaki benzerlik ve farklar nelerdir?', 's. 110-127'],
+      ['Mezopotamya ve Anadolu medeniyetleri ortak mirasa neler katmıştır?', 's. 128-144']]}
   ]
 };
 
@@ -239,7 +239,7 @@ function addNote(draft = {step:1, ders:'', soru:'', ozet:'', keys:null, sinav:''
       if (!plan) return;
       ready.append(h('label', {}, 'Hazır sorular (5. sınıf, 1. dönem). Dokunup seç:'));
       plan.forEach(u => ready.append(h('details', {}, h('summary', {style:'color:var(--main-d);font-weight:600'}, u.unite),
-        u.q.map(q => h('div', {class:'item', style:'cursor:pointer', onclick: () => { soru.value = q; window.scrollTo(0, document.body.scrollHeight); }}, h('span', {}, q))))));
+        u.q.map(([q, pg]) => h('div', {class:'item', style:'cursor:pointer', onclick: () => { soru.value = q; window.scrollTo(0, document.body.scrollHeight); }}, h('span', {}, q), h('small', {style:'white-space:nowrap;color:var(--soft)'}, 'Kitap ' + pg))))));
     };
     paint();
     const sinav = h('input', {type:'date', value:draft.sinav});
