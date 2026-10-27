@@ -113,7 +113,7 @@ function micButton(target) {
   const begin = () => {
     rec = new SR(); rec.lang = 'tr-TR'; rec.interimResults = true;
     rec.continuous = !/Android/i.test(navigator.userAgent);  // Android'de sürekli mod cümleleri tekrarlıyor
-    const base = target.value;  // bu oturumdan önceki yazı
+    let base = target.value;  // bu oturumdan önceki yazı
     rec.onstart = () => { status.textContent = ''; };
     rec.onresult = e => {  // her seferinde oturumun tamamından yeniden kur; hiçbir cümle kaybolmaz
       let txt = '';
@@ -124,7 +124,7 @@ function micButton(target) {
       status.textContent = ERR[ev.error] || ('Hata: ' + ev.error);
       if (ev.error !== 'no-speech') { on = false; ui(); }
     };
-    rec.onend = () => { if (on) { try { rec.start(); } catch { on = false; ui(); } } else ui(); };
+    rec.onend = () => { base = target.value; if (on) { try { rec.start(); } catch { on = false; ui(); } } else ui(); };
     try { rec.start(); } catch (err) { on = false; ui(); status.textContent = 'Başlatılamadı: ' + err.message; }
   };
   const stop = () => { on = false; if (rec) { try { rec.stop(); } catch {} } ui(); };
