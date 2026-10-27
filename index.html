@@ -185,19 +185,68 @@ function suggestKeys(text) {
   return cands.sort((a, b) => b.len - a.len).slice(0, 6).map(c => c.i);
 }
 
+/* Hazır sorular: 5. sınıf, 2026-2027 1. dönem. Kaynak: MEB Türkiye Yüzyılı Maarif Modeli
+   öğretim programları (tymm.meb.gov.tr), öğrenme çıktılarından kısaltılmıştır. Cevap verilmez;
+   çocuk konuyu ders kitabından okur ve kendi cümleleriyle anlatır. */
+const CURRICULUM = {
+  'Fen Bilimleri': [
+    {unite:'1. Ünite: Gökyüzündeki Komşularımız ve Biz', q:[
+      'Güneş nasıl bir yapıdadır ve nasıl bir hareket yapar?',
+      'Güneş, Dünya\'dan çok büyük olduğu hâlde neden küçük görünür?',
+      'Ay\'ın dönme ve dolanma hareketi nedir? Dünya\'dan bakınca neden hep aynı yüzünü görürüz?',
+      'Ay\'ın evreleri neden oluşur ve hangi sırayla görülür?',
+      'Güneş, Dünya ve Ay birbirine göre nasıl hareket eder, büyüklükleri nasıl karşılaştırılır?']},
+    {unite:'2. Ünite: Kuvveti Tanıyalım', q:[
+      'Kuvvet nedir, nasıl ölçülür ve birimi nedir?',
+      'Dinamometre nasıl çalışır? Yayın kalınlığı neden önemlidir?',
+      'Kütle ile ağırlık arasındaki benzerlik ve farklar nelerdir?',
+      'Bir cismin ağırlığı Ay\'da neden Dünya\'dakinden farklıdır?',
+      'Sürtünme kuvveti nedir? Günlük hayatta hareketi nasıl kolaylaştırır ya da zorlaştırır?']},
+    {unite:'3. Ünite: Canlıların Yapısına Yolculuk', q:[
+      'Bitki ve hayvan hücrelerinin benzer ve farklı yönleri nelerdir?',
+      'Hücre, doku, organ, sistem ve organizma arasındaki ilişki nedir?',
+      'Destek ve hareket sistemini hangi yapılar oluşturur? Kemik, eklem ve kas çeşitleri nelerdir?',
+      'Destek ve hareket sistemimizin sağlığı için neler yapmalıyız?']}
+  ],
+  'Sosyal Bilgiler': [
+    {unite:'1. Alan: Birlikte Yaşamak', q:[
+      'Hangi gruplara dâhilsin ve bu gruplardaki rollerin birbiriyle nasıl ilişkili?',
+      'Farklı kültürel özelliklere saygı duymak birlikte yaşamayı nasıl etkiler?',
+      'Yardımlaşma ve dayanışma toplumsal birliği nasıl sürdürür?']},
+    {unite:'2. Alan: Evimiz Dünya', q:[
+      'Yaşadığın ilin konumunu komşu iller, yeryüzü şekilleri ve su kaynaklarına göre anlat.',
+      'Yaşadığın ilde doğal ve beşerî çevre geçmişten bugüne nasıl değişti? Nedenleri ve sonuçları neler?',
+      'Yaşadığın ilde hangi afetler olabilir ve etkilerini azaltmak için neler yapılabilir?',
+      'Ülkemizin kara sınırı olan komşu devletler hangileridir? Başkentleri ve konumları nedir?']},
+    {unite:'3. Alan: Ortak Mirasımız', q:[
+      'Somut ve somut olmayan kültürel miras nedir? Ortak miras neden korunmalıdır?',
+      'Anadolu\'nun ilk yerleşim yerlerinde (Çayönü, Çatalhöyük, Hacılar) insanlar nasıl yaşıyordu?',
+      'İlk yerleşimlerdeki beslenme, barınma ve geçim ile bugünkü hayat arasındaki benzerlik ve farklar nelerdir?',
+      'Mezopotamya ve Anadolu medeniyetleri ortak mirasa neler katmıştır?']}
+  ]
+};
+
 function addNote(draft = {step:1, ders:'', soru:'', ozet:'', keys:null, sinav:''}) {
   if (draft.step === 1) {
     const dersler = [...new Set(['Türkçe','Matematik','Fen Bilimleri','Sosyal Bilgiler','İngilizce', ...notes.map(n => n.ders)])];
     let ders = draft.ders;
-    const chips = h('div', {class:'chips'});
-    const paint = () => chips.replaceChildren(...dersler.map(d => h('span', {class:'chip' + (d === ders ? ' on' : ''), onclick: () => { ders = d; paint(); }}, d)));
+    const chips = h('div', {class:'chips'}), ready = h('div');
+    const soru = h('input', {type:'text', value:draft.soru, placeholder:'Hazır sorulardan seç ya da kendin yaz'});
+    const paint = () => {
+      chips.replaceChildren(...dersler.map(d => h('span', {class:'chip' + (d === ders ? ' on' : ''), onclick: () => { ders = d; paint(); }}, d)));
+      ready.replaceChildren();
+      const plan = CURRICULUM[ders];
+      if (!plan) return;
+      ready.append(h('label', {}, 'Hazır sorular (5. sınıf, 1. dönem). Dokunup seç:'));
+      plan.forEach(u => ready.append(h('details', {}, h('summary', {style:'color:var(--main-d);font-weight:600'}, u.unite),
+        u.q.map(q => h('div', {class:'item', style:'cursor:pointer', onclick: () => { soru.value = q; window.scrollTo(0, document.body.scrollHeight); }}, h('span', {}, q))))));
+    };
     paint();
-    const soru = h('input', {type:'text', value:draft.soru, placeholder:'Örn. Mevsimler neden oluşur?'});
     const sinav = h('input', {type:'date', value:draft.sinav});
     show(h('div', {class:'card'},
       h('h2', {}, '1. Hangi ders, hangi soru?'),
-      h('label', {}, 'Ders'), chips,
-      h('label', {}, 'Konu başlığını soruya çevir'), soru,
+      h('label', {}, 'Ders'), chips, ready,
+      h('label', {}, 'Sorun'), soru,
       micButton(soru),
       h('details', {}, h('summary', {}, 'Sınav günü var mı? (isteğe bağlı)'), sinav),
       h('div', {class:'row'}, h('button', {onclick: () => {
