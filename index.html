@@ -100,17 +100,34 @@ function micButton(target) {
   if (!SR) return h('p', {class:'hint'}, 'Bu tarayıcıda sesle yazma yok. Klavyedeki mikrofon simgesine dokunarak da konuşabilirsin.');
   let rec = null, on = false;
   const btn = h('button', {class:'mic', type:'button'}, 'Konuşarak yaz');
+  const status = h('p', {class:'hint'});
   const ui = () => { btn.classList.toggle('live', on); btn.textContent = on ? 'Dinliyorum... bitince dokun' : 'Konuşarak yaz'; };
+  const ERR = {
+    'not-allowed': 'Mikrofon izni verilmedi. Adres çubuğundaki kilit simgesinden mikrofona izin ver.',
+    'service-not-allowed': 'Bu sayfada mikrofon kullanımına izin yok. Adres https ile başlamalı.',
+    'audio-capture': 'Mikrofon bulunamadı veya başka bir program kullanıyor.',
+    'network': 'Konuşma tanıma servisine ulaşılamadı. İnternet bağlantısını ve tarayıcıyı (Chrome olmalı) kontrol et.',
+    'language-not-supported': 'Türkçe konuşma tanıma bu tarayıcıda desteklenmiyor.',
+    'no-speech': 'Ses duyulmadı.'
+  };
   const begin = () => {
     rec = new SR(); rec.lang = 'tr-TR'; rec.continuous = true; rec.interimResults = false;
+    rec.onstart = () => { status.textContent = ''; };
     rec.onresult = e => { for (let i = e.resultIndex; i < e.results.length; i++) if (e.results[i].isFinal) target.value = (target.value + ' ' + e.results[i][0].transcript).trim(); };
-    rec.onerror = ev => { if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') { on = false; ui(); alert('Mikrofon izni verilmedi. Tarayıcı ayarlarından izin vermelisin.'); } };
+    rec.onerror = ev => {
+      status.textContent = ERR[ev.error] || ('Hata: ' + ev.error);
+      if (ev.error !== 'no-speech') { on = false; ui(); }
+    };
     rec.onend = () => { if (on) { try { rec.start(); } catch { on = false; ui(); } } else ui(); };
-    rec.start();
+    try { rec.start(); } catch (err) { on = false; ui(); status.textContent = 'Başlatılamadı: ' + err.message; }
   };
   const stop = () => { on = false; if (rec) { try { rec.stop(); } catch {} } ui(); };
-  btn.onclick = () => { if (on) stop(); else { on = true; ui(); begin(); stopMic = stop; } };
-  return btn;
+  btn.onclick = () => {
+    if (on) return stop();
+    if (!window.isSecureContext) { status.textContent = 'Sesle yazma için sayfa güvenli adresten (https) açılmalı. Bilgisayardaki dosyadan değil, internet adresinden aç.'; return; }
+    status.textContent = ''; on = true; ui(); begin(); stopMic = stop;
+  };
+  return h('div', {}, btn, status);
 }
 
 /* ---------- Ana sayfa ---------- */
