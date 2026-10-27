@@ -62,6 +62,7 @@
   .st.on .dot { background:var(--main); color:#fff; }
   .st.on { color:var(--main-d); }
   .st.done .dot { background:var(--ok); color:#fff; }
+  a { color:var(--main-d); font-weight:600; }
   .stats { display:flex; gap:12px; margin-bottom:18px; }
   .stat { flex:1; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:12px 16px; box-shadow:var(--shadow); }
   .stat b { display:block; font-size:30px; color:var(--main-d); line-height:1.1; }
@@ -203,6 +204,12 @@ function help() {
     h('p', {}, 'Chrome\'un sağ üstündeki üç noktaya dokun, "Ana ekrana ekle" ya da "Uygulamayı yükle" de. Ana ekranda Defterim simgesi çıkar, tam ekran açılır ve internet olmasa da açılır (konuşarak yazma hariç).'),
     h('h3', {}, 'Notlarım nerede duruyor?'),
     h('p', {}, 'Notların sadece bu cihazın tarayıcısında saklanır, başka yere gönderilmez. Tarayıcı verisi silinirse ya da cihaz değişirse notlar kaybolur. Bunun için ana sayfanın altındaki "Yedekleme" bölümü var: "Yedek al" notlarını bir dosya olarak kaydeder, "Yedek yükle" o dosyayı geri getirir. Ayda bir yedek almak iyi olur.'),
+    h('h3', {}, 'Bu fikir nereden geldi?'),
+    h('p', {}, 'Bu uygulama, Barış Özcan’ın "Okuduğunu Neden Unutuyorsun?" videosundan esinlenilerek yapıldı. Videoda anlatılan fikirler uygulamanın temelini oluşturuyor: kitabı kapatıp anlatmak, okumadan önce soru sormak ve tekrarları biraz unuttuktan sonra yapmak.'),
+    h('p', {class:'hint'},
+      h('a', {href:'https://www.youtube.com/watch?v=nnNkf7ttuGc', target:'_blank', rel:'noopener'}, 'Videoyu izle (YouTube)'), ' · ',
+      h('a', {href:'https://barisozcan.com/yazi/okudugunu-neden-unutuyorsun/', target:'_blank', rel:'noopener'}, 'Yazıyı oku'), ' · ',
+      h('a', {href:'https://journals.sagepub.com/doi/10.1111/j.1467-9280.2006.01693.x', target:'_blank', rel:'noopener'}, '14 kez okuma deneyi (2006 araştırması)')),
     h('div', {class:'row'}, h('button', {onclick: home}, 'Anladım'))));
 }
 
